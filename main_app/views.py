@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Bug
 
 # class Bug:
@@ -27,3 +28,15 @@ def bugs_index(request):
 def bugs_detail(request, bug_id):
   bug = Bug.objects.get(id=bug_id)
   return render(request, 'bugs/detail.html', { 'bug': bug })
+
+class BugCreate(CreateView):
+  model = Bug
+  fields = '__all__'
+
+class BugUpdate(UpdateView):
+  model = Bug
+  fields = ['latin_name', 'description', 'lifespan']
+
+class BugDelete(DeleteView):
+  model = Bug
+  success_url = '/bugs/'

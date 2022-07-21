@@ -10,6 +10,10 @@
     <p>Description: {{ bug.description }}</p>
     <p>Lifespan: {{ bug.lifespan }}</p>
   </div>
+  <div class="card-action">
+    <a href="{% url 'bugs_update' bug.id %}">Edit</a>
+    <a href="{% url 'bugs_delete' bug.id %}">Delete</a>
+  </div>
 </div>
 
 {% endblock %}
