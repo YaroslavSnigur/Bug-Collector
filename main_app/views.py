@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Bug
+from .forms import TreatmentForm
 
 # class Bug:
 #   def __init__(self, name, latin_name, description, lifespan):
@@ -27,7 +28,18 @@ def bugs_index(request):
 
 def bugs_detail(request, bug_id):
   bug = Bug.objects.get(id=bug_id)
-  return render(request, 'bugs/detail.html', { 'bug': bug })
+  treatment_form = TreatmentForm()
+  return render(request, 'bugs/detail.html', {
+    'bug': bug, 'treatment_form': treatment_form
+  })
+
+def add_treatment(request, bug_id):
+  form = TreatmentForm(request.POST)
+  if form.is_valid():
+    new_treatment = form.save(commit=False)
+    new_treatment.bug_id = bug_id
+    new_treatment.save()
+  return redirect('detail', bug_id=bug_id)
 
 class BugCreate(CreateView):
   model = Bug

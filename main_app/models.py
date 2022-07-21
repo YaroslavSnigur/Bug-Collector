@@ -1,6 +1,12 @@
 from django.db import models
 from django.urls import reverse
 
+PROCEDURES = (
+    ('E', 'Extermination'),
+    ('F', 'Feeding'),
+    ('R', 'Reproduction')
+)
+
 class Bug(models.Model):
     name = models.CharField(max_length=100)
     latin_name = models.CharField(max_length=100)
@@ -12,3 +18,19 @@ class Bug(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'bug_id': self.id})
+
+class Treatment(models.Model):
+    date = models.DateField()
+    procedure = models.CharField(
+        max_length=1,
+        choices=PROCEDURES,
+        default=PROCEDURES[0][0]
+    )
+
+    bug = models.ForeignKey(Bug, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.get_procedure_display()} on {self.date}"
+    
+    class Meta:
+        ordering = ['-date']
