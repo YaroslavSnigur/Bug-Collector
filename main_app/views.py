@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 from .models import Bug, Agent, Photo
 from .forms import TreatmentForm
 import uuid
@@ -66,9 +67,16 @@ def assoc_agent(request, bug_id, agent_id):
   Bug.objects.get(id=bug_id).agents.add(agent_id)
   return redirect('detail', bug_id=bug_id)
 
+def unassoc_agent(request, bug_id, agent_id):
+  Bug.objects.get(id=bug_id).agents.remove(agent_id)
+  return redirect('detail', bug_id=bug_id)
+
 class BugCreate(CreateView):
   model = Bug
   fields = '__all__'
+  def form_valid(self, form):
+    form.instance.user = self.request.user
+    return super().form_valid(form)
 
 class BugUpdate(UpdateView):
   model = Bug
@@ -76,4 +84,26 @@ class BugUpdate(UpdateView):
 
 class BugDelete(DeleteView):
   model = Bug
-  success_url = '/bugs/'
+  success_url = '/agents/'
+
+class AgentList(ListView):
+  model = Agent
+
+class AgentDetail(DetailView):
+  model = Agent
+
+class AgentCreate(CreateView):
+  model = Agent
+  fields = '__all__'
+
+class AgentUpdate(UpdateView):
+  model = Agent
+  fields = ['name', 'usage']
+
+class AgentDelete(DeleteView):
+  model = Agent
+  success_url = '/agents/'
+
+def agent_index(request):
+  agents = Agent.objects.all()
+  return render(request, 'main_app/agent_list.html', { 'agents': agents })

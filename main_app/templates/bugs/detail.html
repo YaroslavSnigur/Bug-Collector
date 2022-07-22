@@ -64,6 +64,12 @@
               A {{ agent.name }} for <span>{{ agent.usage }}</span> 
             </span>
           </div>
+          <div class="card-action">
+            <form action="{% url 'unassoc_agent' bug.id agent.id %}" method="post">
+                {% csrf_token %}
+              <button type="submit" class="btn">Remove</button>
+            </form>
+          </div>
         </div>
       {% endfor %}
     {% else %}

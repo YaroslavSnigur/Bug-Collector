@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Agent List</h1>
+
+{% for agent in agent_list %}
+  <a href="{% url 'agents_detail' agent.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ agent.name }}</span>
+            <p>Usage: {{ agent.usage }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}
