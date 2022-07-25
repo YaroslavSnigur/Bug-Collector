@@ -18,4 +18,5 @@ urlpatterns = [
     path('agents/create/', views.AgentCreate.as_view(), name='agents_create'),
     path('agents/<int:pk>/update/', views.AgentUpdate.as_view(), name='agents_update'),
     path('agents/<int:pk>/delete/', views.AgentDelete.as_view(), name='agents_delete'),
+    path('accounts/signup/', views.signup, name='signup'),
 ]
